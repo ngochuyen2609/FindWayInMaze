@@ -1,5 +1,5 @@
 # Tìm đường đi trong mê cung có đích bằng thuật toán A*
-##👥 Về nhóm phát triển
+## 👥 Về nhóm phát triển
 **Project tìm đường đi trong mê cung** được phát triển bởi 4 sinh viên Đại học Bách Khoa Hà Nội:
 - **Cao Thị Ngọc Huyền** - 20225015
 - **Trần Tuấn Hùng** - 20225000
