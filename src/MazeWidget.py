@@ -17,6 +17,7 @@ class MazeWidget(QtWidgets.QWidget):
         # Tạo nhãn hiển thị thông tin
         self.path_len_label = QLabel("A Star Path Length: 0", self)
         self.search_len_label = QLabel("A Star Search Length: 0", self)
+        self.total_len_label = QLabel("Actual total length: 0", self)
 
         # Tạo Scene và View để hiển thị mê cung
         self.scene = QGraphicsScene(self)
@@ -26,6 +27,7 @@ class MazeWidget(QtWidgets.QWidget):
         layout = QVBoxLayout(self)
         layout.addWidget(self.path_len_label)
         layout.addWidget(self.search_len_label)
+        layout.addWidget(self.total_len_label)
         layout.addWidget(self.view)
         self.setLayout(layout)
         
@@ -48,6 +50,8 @@ class MazeWidget(QtWidgets.QWidget):
         
         self.path_len_label.setText(f"A Star Path Length: 0")
         self.search_len_label.setText(f"A Star Search Length: 0")
+        self.total_len_label.setText(f"Actual total length: 0")
+
 
         # Cập nhật maze_logic
         self.width = width
@@ -134,17 +138,19 @@ class MazeWidget(QtWidgets.QWidget):
         #search_path là danh sách các ô mà thuật toán đã kiểm tra -- do phuc tap bo nho
         #forward_path là danh sách các ô trên đường đi ngắn nhất
         if typ < 2:
-            global search_path1, forward_path1
-            search_path1, forward_path1 = MSA.aStar(self.maze_map, self.width, self.height, source, destination, typH)
+            search_path1, forward_path1, totalLen1 = MSA.aStar(self.maze_map, self.width, self.height, source, destination, typH)
             self.tracePath(search_path1, "#00BFFF", lambda: self.tracePath(forward_path1, "#FFFF00"))
-            self.path_len_label.setText(f"A Star Path Length: {len(forward_path1) }")
-            self.search_len_label.setText(f"A Star Search Length: {len(search_path1)+1}")
+            self.path_len_label.setText(f"A Star Path Length: {len(forward_path1)}")
+            self.search_len_label.setText(f"A Start number of cells visited: {len(search_path1)}")
+            self.total_len_label.setText(f"Actual total length: {totalLen1}")
+
         else:
-            global search_path, forward_path
-            search_path, forward_path = MSA.greedyBFS(self.maze_map, self.width, self.height, source, destination, typH)
+            search_path, forward_path, totalLen = MSA.greedyBFS(self.maze_map, self.width, self.height, source, destination, typH)
             self.tracePath(search_path, "#00BFFF", lambda: self.tracePath(forward_path, "#FFFF00"))
             self.path_len_label.setText(f"Greedy BFS Path Length: {len(forward_path)}")
-            self.search_len_label.setText(f"Greedy BFS Search Length: {len(search_path)+1}")
+            self.search_len_label.setText(f"Greedy BFS number of cells visited: {len(search_path)}")
+            self.total_len_label.setText(f"Actual total length: {totalLen}")
+
         self.scene.update() 
 
     def clearPath(self):
@@ -157,6 +163,8 @@ class MazeWidget(QtWidgets.QWidget):
         # Cập nhật thông tin
         self.path_len_label.setText("Path Length: 0")
         self.search_len_label.setText("Search Length: 0")
+        self.total_len_label.setText("Actual total length: 0")
+
         
         # Cập nhật lại hiển thị
         self.scene.update()
